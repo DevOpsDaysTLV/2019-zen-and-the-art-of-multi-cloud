@@ -1,0 +1,23 @@
+{
+  "builders": [{
+    "type": "amazon-ebs",
+    "source_ami_filter": {
+    "filters": {
+      "virtualization-type": "hvm",
+      "name": "ubuntu/images/*ubuntu-bionic-18.04-amd64-server-*",
+      "root-device-type": "ebs"
+    },
+    "owners": ["099720109477"],
+    "most_recent": true
+  },
+    "instance_type": "t2.medium",
+    "ssh_username": "ubuntu",
+    "ami_name": "DevOpsDaysTLV2019-Zen-{{timestamp}}",
+    "ami_description": "DevOpsDays Tel Aviv 2019 Zen and the art of multi-cloud maintenance"
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "script": "build.sh",
+    "execute_command": "echo 'packer' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
+  }]
+}
