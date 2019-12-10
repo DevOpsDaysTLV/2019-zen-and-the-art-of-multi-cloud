@@ -37,9 +37,6 @@ data "aws_ami" "base" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "servers" {
-  # When using these modules in your own templates, you will need to use a Git URL with a ref attribute that pins you
-  # to a specific version of the modules, such as the following example:
-  # source = "git::git@github.com:hashicorp/terraform-aws-consul.git//modules/consul-cluster?ref=v0.0.1"
   source = "git::git@github.com:hashicorp/terraform-aws-consul.git//modules/consul-cluster?ref=v0.7.3"
 
   cluster_name  = "${var.cluster_name}-server"
@@ -51,7 +48,7 @@ module "servers" {
   cluster_tag_key   = var.cluster_tag_key
   cluster_tag_value = var.cluster_name
 
-  ami_id    = "${var.ami_id == null ? data.aws_ami.base.image_id : var.ami_id}"
+  ami_id    = "${data.aws_ami.base.image_id}"
   user_data = "${data.template_file.user_data_server.rendered}"
 
   vpc_id     = data.aws_vpc.default.id
@@ -67,7 +64,7 @@ module "servers" {
   tags = [
     {
       key                 = "Environment"
-      value               = "development"
+      value               = "DevOpsDaysTLV2019-Zen"
       propagate_at_launch = true
     }
   ]
@@ -87,6 +84,30 @@ module "nomad_security_group_rules" {
   rpc_port  = 4647
   serf_port = 4648
 }
+
+module "vault_security_group_rules" {
+  source = "git::git@github.com:hashicorp/terraform-aws-vault.git//modules/vault-security-group-rules?ref=v0.13.3"
+
+  security_group_id                    = module.servers.security_group_id
+  allowed_inbound_cidr_blocks          = var.allowed_inbound_cidr_blocks
+  allowed_inbound_security_group_ids   = data.aws_subnet_ids.default.ids
+  allowed_inbound_security_group_count = 0
+
+  api_port     = 8200
+  cluster_port = 8201
+}
+
+module "vault_security_group_rules" {
+  source = "git::git@github.com:hashicorp/terraform-aws-vault.git//modules/vault-security-group-rules?ref=v0.13.3"
+
+  security_group_id           = module.servers.security_group_id
+  allowed_inbound_cidr_blocks = var.allowed_inbound_cidr_blocks
+
+  http_port = 4646
+  rpc_port  = 4647
+  serf_port = 4648
+}
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 # THE USER DATA SCRIPT THAT WILL RUN ON EACH CONSUL SERVER EC2 INSTANCE WHEN IT'S BOOTING
