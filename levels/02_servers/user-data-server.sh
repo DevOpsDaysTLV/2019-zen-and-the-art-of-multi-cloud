@@ -14,7 +14,6 @@ data_dir = "/var/lib/consul"
 datacenter = "${cluster_tag_value}"
 enable_syslog = true
 log_level = "DEBUG"
-recursors =  ["127.0.0.1"]
 retry_join = ["provider=aws tag_key=${cluster_tag_key} tag_value=${cluster_tag_value}"]
 server = true
 ui = true
