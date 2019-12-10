@@ -25,7 +25,7 @@
 ],
   "provisioners": [{
     "type": "shell",
-    "script": "build.sh",
+    "script": "base.sh",
     "execute_command": "echo 'packer' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
   }]
 }
