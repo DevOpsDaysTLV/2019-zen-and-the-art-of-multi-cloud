@@ -109,8 +109,10 @@ data "template_file" "user_data_server" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 data "aws_vpc" "default" {
-  default = var.vpc_id == null ? true : false
-  id      = "${var.vpc_id}"
+  filter {
+    name   = "tag:Name"
+    values = ["devopsdays"]
+  }
 }
 
 data "aws_subnet_ids" "default" {
