@@ -97,18 +97,6 @@ module "vault_security_group_rules" {
   cluster_port = 8201
 }
 
-module "vault_security_group_rules" {
-  source = "git::git@github.com:hashicorp/terraform-aws-vault.git//modules/vault-security-group-rules?ref=v0.13.3"
-
-  security_group_id           = module.servers.security_group_id
-  allowed_inbound_cidr_blocks = var.allowed_inbound_cidr_blocks
-
-  http_port = 4646
-  rpc_port  = 4647
-  serf_port = 4648
-}
-
-
 # ---------------------------------------------------------------------------------------------------------------------
 # THE USER DATA SCRIPT THAT WILL RUN ON EACH CONSUL SERVER EC2 INSTANCE WHEN IT'S BOOTING
 # This script will configure and start Consul
