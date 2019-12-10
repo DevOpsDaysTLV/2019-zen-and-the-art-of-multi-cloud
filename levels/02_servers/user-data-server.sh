@@ -6,13 +6,8 @@ set -e
 # From: https://alestic.com/2010/12/ec2-user-data-output/
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
-echo "Determining local IP address"
-LOCAL_IPV4=$(hostname --ip-address)
-echo "Using $${LOCAL_IPV4} as IP address for configuration and anouncement"
-
-
 cat << EOCCF >/etc/consul.d/server.hcl
-advertise_addr = "$${LOCAL_IPV4}"
+advertise_addr = "{{ GetPrivateIP }}"
 bootstrap_expect = 3
 client_addr =  "0.0.0.0"
 data_dir = "/var/lib/consul"
@@ -26,7 +21,7 @@ ui = true
 EOCCF
 
 cat << EONCF >/etc/nomad.d/server.hcl
-bind_addr = "0.0.0.0"
+bind_addr          = "0.0.0.0"
 region             = "${cluster_tag_value}"
 datacenter         = "${cluster_tag_value}"
 data_dir           = "/var/lib/nomad/"
@@ -36,11 +31,6 @@ leave_on_terminate = true
 server {
   enabled          = true
   bootstrap_expect = 3
-}
-advertise {
-  http = "$${LOCAL_IPV4}:4646"
-  rpc  = "$${LOCAL_IPV4}:4647"
-  serf = "$${LOCAL_IPV4}:4648"
 }
 EONCF
 
