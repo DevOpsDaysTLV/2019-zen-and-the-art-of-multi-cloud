@@ -13,9 +13,7 @@
     "instance_type": "t2.medium",
     "ssh_username": "ubuntu",
     "ami_name": "DevOpsDaysTLV2019-Zen-{{timestamp}}",
-    "ami_description": "DevOpsDays Tel Aviv 2019 Zen and the art of multi-cloud maintenance"
-  },
-  {
+    "ami_description": "DevOpsDays Tel Aviv 2019 Zen and the art of multi-cloud maintenance",
     "subnet_filter": {
       "filters": {
         "tag:Name": "devopsdays-public"
