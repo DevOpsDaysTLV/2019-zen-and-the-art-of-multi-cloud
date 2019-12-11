@@ -1,20 +1,46 @@
 #!/bin/bash
 #
-#
+# This script is checking that all the requiered binaries are available and application versions are suitable
+# It also inits terraform and downloads the needed plugins
 
-CHECKPOINT_URL="https://checkpoint-api.hashicorp.com/v1/check"
-PACKER_VERSION=$(curl -s "${CHECKPOINT_URL}"/packer | jq .current_version | tr -d '"')
-TERRAFORM_VERSION=$(curl -s "${CHECKPOINT_URL}"/terraform | jq .current_version | tr -d '"')
-CONSUL_VERSION=$(curl -s "${CHECKPOINT_URL}"/consul | jq .current_version | tr -d '"')
-NOMAD_VERSION=$(curl -s "${CHECKPOINT_URL}"/nomad | jq .current_version | tr -d '"')
-VAULT_VERSION="1.3.0"
+starprint(){
+  local INPUT=$*
+  local LENGTH=$(echo "$INPUT" | awk '{print length+4}')
+  line() { for i in $(eval echo "{1..$LENGTH}"); do echo -n '*'; done; echo; }
+  line
+  echo -n "* "; echo -n $INPUT;echo -n " *";echo
+  line
+}
 
-# cd /tmp/
+app_check(){
+	local app_name=$1
+	local desired_app_version=$2
+	command -v $app_name >/dev/null
+	if [[ $? -ne 0 ]]; then
+    	echo "$app_name not found"
+    	echo "Please download $desired_app_version"
+    	return 1
+  	else
+  		local app_version="$($app_name version | head -n 1)" # Consul is talking too much
+  		if [[ "$app_version" =~ "$desired_app_version" ]]; then
+	  		echo "Found $app_version - OK"
+  		else
+  			echo "Found $app_version, but $desired_app_version is required, please update"
+  			return 1
+	  	fi
+  	fi
+}
 
-# echo "Checking latest Consul and Nomad versions..."
-# echo "Fetching Consul version ${CONSUL_VERSION} ..."
-# curl -s https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip -o consul.zip
-# echo "Installing Consul version ${CONSUL_VERSION} ..."
-# unzip consul.zip
-# chmod +x consul
-# mv consul /usr/local/bin/consul
+app_check packer "Packer v1.4.5"
+app_check consul "Consul v1.6.1"
+app_check vault "Vault v1.3.0"
+app_check terraform "Terraform v0.12.17" && \
+
+for folder in $(ls -1 levels); do
+	if [[ -f "levels/$folder/main.tf" ]]; then
+		cd "levels/$folder"
+		starprint "Initialising terraform plugins in levels/$folder"
+		terraform init
+		cd -
+	fi
+done
