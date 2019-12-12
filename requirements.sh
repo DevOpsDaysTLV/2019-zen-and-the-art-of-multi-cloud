@@ -3,6 +3,8 @@
 # This script is checking that all the requiered binaries are available and application versions are suitable
 # It also inits terraform and downloads the needed plugins
 
+MAGIC=$1
+
 starprint(){
   local INPUT=$*
   local LENGTH=$(echo "$INPUT" | awk '{print length+4}')
@@ -41,6 +43,9 @@ for folder in $(ls -1 levels); do
 		cd "levels/$folder"
 		starprint "Initialising terraform plugins in levels/$folder"
 		terraform init
+    if [[ -n $MAGIC ]]; then
+		  terraform $MAGIC -auto-approve
+    fi
 		cd -
 	fi
 done
