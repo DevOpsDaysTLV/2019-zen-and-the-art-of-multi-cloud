@@ -88,7 +88,7 @@ module "nomad_security_group_rules" {
 resource "aws_security_group_rule" "allow_nomad_dynamic_inbound" {
   type        = "ingress"
   from_port   = 80
-  to_port     = 10000
+  to_port     = 65535 # Don't do it in prod
   protocol    = "tcp"
   cidr_blocks = var.allowed_inbound_cidr_blocks
 
