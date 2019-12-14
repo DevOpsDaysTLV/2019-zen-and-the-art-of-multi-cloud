@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  labels:
+    app: web-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      annotations:
+        "consul.hashicorp.com/connect-inject": "true"
+        "consul.hashicorp.com/connect-service-upstreams": "old-monolyth:8080"
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - name: web-app
+        image: andel7/simple_php_mysql_app:0.2
+        ports:
+        - containerPort: 80
+        env:
+        - name: external_server
+          value: "127.0.0.1"

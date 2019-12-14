@@ -5,10 +5,14 @@ module "devops-k8" {
   subnets      = data.aws_subnet_ids.selected.ids
   vpc_id       = data.aws_vpc.default.id
 
+  kubeconfig_aws_authenticator_command = "aws" 
+  kubeconfig_aws_authenticator_command_args = ["eks","get-token","--cluster-name","dod2019"]  
+  worker_additional_security_group_ids = [data.aws_security_group.allow_from_vpc.id]
   worker_groups = [
     {
-      instance_type = "m5.large"
+      instance_type = "t2.large"
       asg_max_size  = 3
+      asg_desired_capacity = 3
       tags = [{
         key                 = "Terraform"
         value               = "true"
@@ -22,6 +26,17 @@ module "devops-k8" {
   }
 }
 
+##############################
+
+data "aws_security_group" "allow_from_vpc" {
+      filter {
+        name = "group-name"
+        values = ["allow_from_vpc"]
+      }
+}
+
+
+#############################
 data "aws_availability_zones" "available" {
   state = "available"
 }

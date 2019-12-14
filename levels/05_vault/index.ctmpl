@@ -1,0 +1,9 @@
+Please decompose me!
+</br>
+</br>
+I'm spilling over the credentials
+</br>
+{{ with secret "database/creds/my-role" }}
+USER {{ .Data.username }} </br>
+PASSWORD{{ .Data.password }} </br>
+{{ end }}
