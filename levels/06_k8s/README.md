@@ -1,10 +1,15 @@
 # Kubernetes level 06
 You will need the following:
 https://kubernetes.io/docs/tasks/tools/install-kubectl/
+
 https://helm.sh/docs/intro/install/
+
 https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html
+
 and updated aws-cli
+Change directory to 06_k8s 
 ```sh
+terraform apply
 export KUBECONFIG=<PATH TO YOUR DEVOPSDAYS REPO>/2019-zen-and-the-art-of-multi-cloud/levels/06_k8s/kubeconfig_my-cluster
 cd  /tmp
 ```
