@@ -43,9 +43,10 @@ vault secrets  enable  database
 ```
 This command creates a reference to our RDS that will be called my-mysql-database
 ```sh
+export RDS_ENDPOINT="$(terraform output rds_endpoint)"
 vault write database/config/my-mysql-database \
     plugin_name=mysql-rds-database-plugin \
-    connection_url="{{username}}:{{password}}@tcp(demodb.cx83velgmdq4.us-east-2.rds.amazonaws.com:3306)/" \
+    connection_url="{{username}}:{{password}}@tcp(${RDS_ENDPOINT})/" \
     allowed_roles="my-role" \
     username="root" \
     password="devopsdays4life"
