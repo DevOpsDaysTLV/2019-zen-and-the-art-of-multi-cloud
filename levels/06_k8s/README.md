@@ -10,18 +10,19 @@ and updated aws-cli
 Change directory to 06_k8s 
 ```sh
 terraform apply
-export KUBECONFIG=<PATH TO YOUR DEVOPSDAYS REPO>/2019-zen-and-the-art-of-multi-cloud/levels/06_k8s/kubeconfig_my-cluster
+export KUBECONFIG=<PATH TO YOUR DEVOPSDAYS REPO>/2019-zen-and-the-art-of-multi-cloud/levels/06_k8s/kubeconfig_dod2019
 cd  /tmp
 ```
 # Installing Consul On Kubernetes
 Let's download Consul K8 Helmchart
 ```sh
+cd /tmp
 git clone --single-branch --branch v0.14.0 https://github.com/hashicorp/consul-helm.git
 helm inspect chart /tmp/consul-helm
+cd -
 ```
 Now let's get back to our directory (06_k8s)
 ```sh
-cd KUBECONFIG=<PATH TO YOUR DEVOPSDAYS REPO>/2019-zen-and-the-art-of-multi-cloud/levels/06_k8s/
 helm install hashicorp  /tmp/consul-helm -f ./values.yaml
 ```
 Run the following command:
@@ -48,13 +49,13 @@ kubectl expose pod nginx --type=LoadBalancer --name=nginx --port=80
 Browse again to http://localhost:9999/ui/ and see the new nginx service synced to kubernetes
 
 # Let's join out of (K8s) cluster machine to the party
-Connect with SSH to ooc-client machine 
+Connect with SSH to ooc-client machine ( the one from the previous level )
 Notice that the following command will fail
 ```sh
 kubectl get pods
 ```
 
-Get ARN of the IAM Role of the instance
+Back to your laptop - get ARN of the IAM Role of the instance
 And add it to aws-auth configmap
 ```sh
 EDITOR=vi kubectl edit cm aws-auth -n kube-system 
@@ -136,14 +137,14 @@ Back to your laptop
 kubectl run -i --tty busybox --image=busybox --restart=Never -- sh 
 ping consul
 ping consul
-ping old-mysql
-ping old-mysql
+ping old-monolyth
+ping old-monolyth
 ```
 This is not a mistake run it twice :)
 Notice that DNS is not working eventhough we see services.
 
 Let's exit and delete busybox pod
-``
+```
 exit 
 kubectl delete pod busybox
 ```
@@ -154,14 +155,16 @@ kubectl get svc hashicorp-consul-dns -o jsonpath='{.spec.clusterIP}'
 Let's edit coredns config map and add consul section
 ```
 EDITOR=vi kubectl edit configmap coredns -n kube-system
+```
 Before kind: ConfigMap add
+```sh
     consul {
       errors
       cache 30
       forward . <IP from the previous step>
     }
 ```
-Your output should end up looking something like that:
+Your configmap should end up looking something like that:
 ```yaml
 apiVersion: v1
 data:

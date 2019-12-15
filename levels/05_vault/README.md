@@ -87,6 +87,8 @@ vault write auth/aws/role/dev-role-iam auth_type=iam bound_iam_principal_arn=<AR
 Browse to public IP of ooc-client
 
 # Vault Agent Setup
+Open new terminal window
+
 ssh to the old-monolyth machine (ooc-client)
 
 copy  index.ctmpl to the server  to /etc/vault.d

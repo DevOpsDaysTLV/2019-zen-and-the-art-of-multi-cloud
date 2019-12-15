@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: web-app
-        image: andel7/simple_php_mysql_app:0.2
+        image: andel7/simple_php_mysql_app:0.5
         ports:
         - containerPort: 80
         env:
