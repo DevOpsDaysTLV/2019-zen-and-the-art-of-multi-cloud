@@ -64,8 +64,8 @@ EOCSU
 cat << EONSU >/etc/systemd/system/nomad.service
 [Unit]
 Description=nomad agent
-Requires=network-online.target
-After=network-online.target
+Requires=network-online.target consul.service
+After=network-online.target consul.service
 [Service]
 LimitNOFILE=65536
 Restart=on-failure
@@ -79,8 +79,8 @@ EONSU
 cat << EOVSU >/etc/systemd/system/vault.service
 [Unit]
 Description=Vault
-Requires=network-online.target
-After=network-online.target
+Requires=network-online.target consul.service
+After=network-online.target consul.service
 
 [Service]
 LimitNOFILE=65536

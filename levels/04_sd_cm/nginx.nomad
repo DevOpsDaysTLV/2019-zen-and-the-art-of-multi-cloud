@@ -35,7 +35,7 @@ job "nginx" {
       driver = "docker"
 
       config {
-        image = "nginx"
+        image = "nginx:alpine"
         volumes = [
           # Use relative paths to rebind paths already in the allocation dir
            "html:/usr/share/nginx/html"
@@ -72,7 +72,6 @@ job "nginx" {
         data          = <<EORC
 DevOpsDays Tel Aviv 2019
 bind_port:   {{ env "NOMAD_PORT_http" }}
-scratch_dir: {{ env "NOMAD_TASK_DIR" }}
 node_id:     {{ env "node.unique.id" }}
 aws_as:      {{ env "attr.platform.aws.placement.availability-zone" }}
 

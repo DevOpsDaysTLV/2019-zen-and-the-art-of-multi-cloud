@@ -1,4 +1,5 @@
 set -x
+set -e
 export TERM=xterm-256color
 export DEBIAN_FRONTEND=noninteractive
 
@@ -22,14 +23,14 @@ add-apt-repository \
 apt-get update
 apt-get install -y docker-ce docker-ce-cli containerd.io
 
+echo "Checking latest Consul and Nomad versions..."
 CHECKPOINT_URL="https://checkpoint-api.hashicorp.com/v1/check"
-CONSUL_VERSION=$(curl -s "${CHECKPOINT_URL}"/consul | jq .current_version | tr -d '"')
-NOMAD_VERSION=$(curl -s "${CHECKPOINT_URL}"/nomad | jq .current_version | tr -d '"')
+CONSUL_VERSION=$(curl -s "${CHECKPOINT_URL}"/consul | jq -r .current_version)
+NOMAD_VERSION=$(curl -s "${CHECKPOINT_URL}"/nomad | jq -r .current_version)
 VAULT_VERSION="1.3.0"
 
 cd /tmp/
 
-echo "Checking latest Consul and Nomad versions..."
 echo "Fetching Consul version ${CONSUL_VERSION} ..."
 curl -s https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip -o consul.zip
 echo "Installing Consul version ${CONSUL_VERSION} ..."
