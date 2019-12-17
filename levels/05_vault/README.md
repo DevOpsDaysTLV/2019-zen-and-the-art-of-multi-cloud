@@ -113,6 +113,7 @@ copy  local client.hcl to the ooc-client to /etc/vault.d/client.hcl
 
 execute the following command on ooc-client
 ```sh
-vault agent -config=/etc/vault.d/client.hcl
+cd /etc/vault.d/
+sudo vault agent -config=/etc/vault.d/client.hcl
 ```
 Browse to public IP of ooc-client
