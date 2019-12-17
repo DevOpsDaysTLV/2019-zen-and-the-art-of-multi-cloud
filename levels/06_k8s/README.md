@@ -99,7 +99,8 @@ metadata:
   ```
   
 Copy kubeconfig_dod2019 from level 06 to /home/ubuntu/kubeconfig on ooc-client
-ron on  ooc-client and notice that this time command will work
+
+Run on  ooc-client and notice that this time command will work
 ```sh
 export KUBECONFIG=/home/ubuntu/kubeconfig
 kubectl get pods
@@ -128,6 +129,7 @@ systemctl restart  consul
 ```
 
 Browse to http://localhost:9999/ui/
+
 Boom! Check new service called old-monolyth
 
 Back to your laptop
