@@ -75,7 +75,7 @@ vault policy write old-monolyth-policy policy.hcl
 Adding AWS auth - this will allow our EC2 instance identify themselves to vault to get proper policy
 ```sh
 vault auth enable aws
-vault write auth/aws/config/client secret_key=REPLACE_WITH_YOUR_SECRET_KEY access_key=REPLACE_WITH_YOUR_ACCESS_KEY
+vault write auth/aws/config/client secret_key=${AWS_SECRET_ACCESS_KEY} access_key=${AWS_ACCESS_KEY_ID}
 ```
 Check the ARN of the IAM role of the ooc-client 
 
@@ -93,7 +93,7 @@ ssh to the old-monolyth machine (ooc-client)
 
 copy  index.ctmpl to the server  to /etc/vault.d
 
-Run the following command to update the placehoder with real vault address
+Run the following command to update the placehoder with real vault address on your laptop (in 05_vault directory)
 ```sh
 sed -i.bu "s+REPLACE_WITH_YOUR_VAULT_IP+$VAULT_ADDR+g"  client.hcl
 ```
