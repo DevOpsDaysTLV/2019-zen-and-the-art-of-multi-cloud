@@ -89,9 +89,9 @@ Browse to public IP of ooc-client
 # Vault Agent Setup
 Open new terminal window
 
-ssh to the old-monolyth machine (ooc-client)
+ssh to the ooc-client ec2-instance that was created
 
-copy local index.ctmpl to the server  to /etc/vault.d/index.ctmpl
+copy local index.ctmpl to the ooc-client to /etc/vault.d/index.ctmpl (see file content below)
 ```htlm
 Please decompose me!
 </br>
@@ -104,12 +104,12 @@ PASSWORD{{ .Data.password }} </br>
 {{ end }}
 ```
 
-Run the following command to update the placehoder with real vault address on your laptop (in 05_vault directory)
+Run the following command to update the placeholder with real vault address on your laptop (in 05_vault directory)
 ```sh
 sed -i.bu "s+REPLACE_WITH_YOUR_VAULT_IP+$VAULT_ADDR+g"  client.hcl
 ```
 
-copy  local client.hcl to the server to /etc/vault.d/client.hcl
+copy  local client.hcl to the ooc-client to /etc/vault.d/client.hcl
 
 execute the following command on ooc-client
 ```sh
