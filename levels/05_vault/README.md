@@ -1,7 +1,7 @@
 # Vault Level 05
 create enviroment variable to include your ssh key. You will need this to connect to the server in this step
 ```sh
-TF_VAR_ssh_key_name=<YOUR KEYPAIR TO CONNECT TO THE SERVER>
+TF_VAR_ssh_key_name=<YOUR KEY-PAIR NAME IN AWS TO CONNECT TO THE SERVER>
 ```
 change directory to 05_vault directory and execute the following commands
 ```sh
@@ -91,14 +91,25 @@ Open new terminal window
 
 ssh to the old-monolyth machine (ooc-client)
 
-copy  index.ctmpl to the server  to /etc/vault.d
+copy local index.ctmpl to the server  to /etc/vault.d/index.ctmpl
+```htlm
+Please decompose me!
+</br>
+</br>
+I'm spilling over the credentials
+</br>
+{{ with secret "database/creds/my-role" }}
+USER {{ .Data.username }} </br>
+PASSWORD{{ .Data.password }} </br>
+{{ end }}
+```
 
 Run the following command to update the placehoder with real vault address on your laptop (in 05_vault directory)
 ```sh
 sed -i.bu "s+REPLACE_WITH_YOUR_VAULT_IP+$VAULT_ADDR+g"  client.hcl
 ```
 
-copy  client.hcl to the server  to /etc/vault.d 
+copy  local client.hcl to the server to /etc/vault.d/client.hcl
 
 execute the following command on ooc-client
 ```sh
