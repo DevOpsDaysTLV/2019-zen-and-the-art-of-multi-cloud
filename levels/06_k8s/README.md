@@ -1,5 +1,6 @@
 # Kubernetes level 06
 You will need the following:
+
 https://kubernetes.io/docs/tasks/tools/install-kubectl/
 
 https://helm.sh/docs/intro/install/
@@ -11,7 +12,6 @@ Change directory to 06_k8s
 ```sh
 terraform apply
 export KUBECONFIG=<PATH TO YOUR DEVOPSDAYS REPO>/2019-zen-and-the-art-of-multi-cloud/levels/06_k8s/kubeconfig_dod2019
-cd  /tmp
 ```
 # Installing Consul On Kubernetes
 Let's download Consul K8 Helmchart
@@ -19,28 +19,41 @@ Let's download Consul K8 Helmchart
 cd /tmp
 git clone --single-branch --branch v0.14.0 https://github.com/hashicorp/consul-helm.git
 helm inspect chart /tmp/consul-helm
-cd -
+```
+
+You should see the following output
+```sh
+apiVersion: v1
+description: Install and configure Consul on Kubernetes.
+home: https://www.consul.io
+name: consul
+sources:
+- https://github.com/hashicorp/consul
+- https://github.com/hashicorp/consul-helm
+- https://github.com/hashicorp/consul-k8s
+version: 0.14.0
 ```
 Now let's get back to our directory (06_k8s)
 ```sh
 helm install hashicorp  /tmp/consul-helm -f ./values.yaml
 ```
-Run the following command:
+Run the following command and wait until all pods are running
 ```sh
-kubectl get pods
+kubectl get pods 
 ```
-Wait untill all is running
+Run the command below to get the address of the LoadBalancer
+
 ```
 kubectl get svc
 ```
-You can find ELB address to connect or you can use this command to connect without ELB
+Or use this command to connect without ELB
 ```
 kubectl port-forward svc/hashicorp-consul-ui 9999:80
 ```
 Browse to http://localhost:9999/ui/
 
 # Catalog Sync
-Let run Nginx service
+Let's run Nginx service
 ```sh
 kubectl run --generator=run-pod/v1 nginx --image=nginx
 kubectl expose pod nginx --type=LoadBalancer --name=nginx --port=80
@@ -158,7 +171,7 @@ Let's edit coredns config map and add consul section
 ```
 EDITOR=vi kubectl edit configmap coredns -n kube-system
 ```
-Before kind: ConfigMap add
+Before **kind: ConfigMap** add
 ```sh
     consul {
       errors
