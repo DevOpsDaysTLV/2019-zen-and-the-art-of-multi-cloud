@@ -62,14 +62,16 @@ kubectl expose pod nginx --type=LoadBalancer --name=nginx --port=80
 Browse again to http://localhost:9999/ui/ and see the new nginx service synced to kubernetes
 
 # Let's join out of (K8s) cluster machine to the party
-Connect with SSH to ooc-client machine ( the one from the previous level )
+Connect with SSH to ooc-client machine ( the one from the previous level ) and sudo -i
 Notice that the following command will fail
 ```sh
 kubectl get pods
 ```
+Get ARN of the IAM Role of the instance (ooc client)
 
-Back to your laptop - get ARN of the IAM Role of the instance
-And add it to aws-auth configmap
+Back to your laptop 
+
+Add it to aws-auth configmap
 ```sh
 EDITOR=vi kubectl edit cm aws-auth -n kube-system 
 ```
@@ -148,6 +150,11 @@ Boom! Check new service called old-monolyth
 Back to your laptop
 
 # Adding Consul DNS 
+```sh
+kubectl get svc
+```
+Notice we have consul service with type of ExternalName 
+
 ```sh
 kubectl run -i --tty busybox --image=busybox --restart=Never -- sh 
 ping consul
