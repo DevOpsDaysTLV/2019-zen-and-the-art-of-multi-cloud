@@ -37,7 +37,7 @@ data "aws_ami" "base" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "servers" {
-  source = "git::git@github.com:hashicorp/terraform-aws-consul.git//modules/consul-cluster?ref=v0.7.3"
+  source = "github.com/hashicorp/terraform-aws-consul.git//modules/consul-cluster?ref=v0.7.3"
 
   cluster_name  = "${var.cluster_name}-server"
   cluster_size  = var.num_servers
@@ -75,7 +75,7 @@ module "servers" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "nomad_security_group_rules" {
-  source = "git::git@github.com:hashicorp/terraform-aws-nomad.git//modules/nomad-security-group-rules?ref=v0.5.0"
+  source = "github.com/hashicorp/terraform-aws-nomad.git//modules/nomad-security-group-rules?ref=v0.6.0"
 
   security_group_id           = module.servers.security_group_id
   allowed_inbound_cidr_blocks = var.allowed_inbound_cidr_blocks
@@ -86,7 +86,7 @@ module "nomad_security_group_rules" {
 }
 
 module "vault_security_group_rules" {
-  source = "git::git@github.com:hashicorp/terraform-aws-vault.git//modules/vault-security-group-rules?ref=v0.13.3"
+  source = "github.com/hashicorp/terraform-aws-vault.git//modules/vault-security-group-rules?ref=v0.13.6"
 
   security_group_id                    = module.servers.security_group_id
   allowed_inbound_cidr_blocks          = var.allowed_inbound_cidr_blocks

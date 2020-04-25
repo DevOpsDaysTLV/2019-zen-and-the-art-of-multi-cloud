@@ -37,7 +37,7 @@ data "aws_ami" "base" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "ooc_clients" {
-  source = "git::git@github.com:hashicorp/terraform-aws-consul.git//modules/consul-cluster?ref=v0.7.3"
+  source = "github.com/hashicorp/terraform-aws-consul.git//modules/consul-cluster?ref=v0.7.3"
 
   cluster_name  = "ooc-client"
   cluster_size  = 1
@@ -75,7 +75,7 @@ module "ooc_clients" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "nomad_security_group_rules" {
-  source = "git::git@github.com:hashicorp/terraform-aws-nomad.git//modules/nomad-security-group-rules?ref=v0.5.0"
+  source = "github.com/hashicorp/terraform-aws-nomad.git//modules/nomad-security-group-rules?ref=v0.6.0"
 
   security_group_id           = module.ooc_clients.security_group_id
   allowed_inbound_cidr_blocks = var.allowed_inbound_cidr_blocks
