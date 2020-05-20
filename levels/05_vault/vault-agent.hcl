@@ -1,7 +1,7 @@
 pid_file = "./pidfile"
 
 vault {
-        address = "https://3.136.26.192:8200"
+        address = "https://REPLACE_WITH_YOUR_VAULT_IP:8200"
 }
 
 auto_auth {
